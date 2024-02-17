@@ -3,22 +3,13 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { supabase } from './utils/supabase'
-import { useEffect, useState } from 'react';
+
+import RegisterVehicles from './pages/RegisterVehicles';
+import { Route, Routes } from 'react-router-dom';
+import Taxies from './pages/Taxies';
 
 function App() {
-  const [taxies, setTaxies] = useState([])
-  useEffect(() => {
-    async function getTaxies() {
-      const { data: taxies } = await supabase.from('taxies').select()
-      console.log(taxies);
-      if (taxies.length > 0) {
-        setTaxies(taxies)
-      }
-    }
-
-    getTaxies()
-  }, [])
+  
   return (
     <div>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -26,9 +17,10 @@ function App() {
         <Navbar.Brand href="#home">City Taxi System</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
+          <Nav className="me-auto" variant='underline'>
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/register-vehicles">Register Vehicle</Nav.Link>
+            <Nav.Link href="/taxies">Taxies</Nav.Link>
             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">
@@ -44,9 +36,14 @@ function App() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-    {taxies.map(taxi => {
-      return <div>{taxi.name}</div>
-    })}
+    <div>
+      <Routes>
+        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/register-vehicles" element={<RegisterVehicles />} />
+        <Route path="/taxies" element={<Taxies />} />
+      </Routes>
+    </div>
+    
     </div>
   );
 }
