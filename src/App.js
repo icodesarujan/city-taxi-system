@@ -3,8 +3,22 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { supabase } from './utils/supabase'
+import { useEffect, useState } from 'react';
 
 function App() {
+  const [taxies, setTaxies] = useState([])
+  useEffect(() => {
+    async function getTaxies() {
+      const { data: taxies } = await supabase.from('taxies').select()
+      console.log(taxies);
+      if (taxies.length > 0) {
+        setTaxies(taxies)
+      }
+    }
+
+    getTaxies()
+  }, [])
   return (
     <div>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -30,6 +44,9 @@ function App() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
+    {taxies.map(taxi => {
+      return <div>{taxi.name}</div>
+    })}
     </div>
   );
 }
