@@ -36,13 +36,13 @@ function App() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-    <div>
+    <Container className='mt-5'>
       <Routes>
         {/* <Route path="/" element={<Home />} /> */}
         <Route path="/register-vehicles" element={<RegisterVehicles />} />
         <Route path="/taxies" element={<Taxies />} />
       </Routes>
-    </div>
+    </Container>
     
     </div>
   );

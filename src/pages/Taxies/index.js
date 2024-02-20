@@ -1,6 +1,7 @@
 import React from 'react'
 import { supabase } from '../../utils/supabase'
 import { useEffect, useState } from 'react';
+import { Table } from 'react-bootstrap';
 
 const Taxies = () => {
   const [taxies, setTaxies] = useState([])
@@ -17,9 +18,30 @@ const Taxies = () => {
   }, [])
   return (
     <>
-      {taxies.map(taxi => {
-        return <div>{taxi.name}</div>
-      })}
+      <Table striped bordered hover size="sm">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Vehicle name</th>
+            <th>Vehicle number</th>
+            <th>Driver name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {taxies.map(taxi => {
+            return (
+            <tr key={taxi.id}>
+              <td>{taxi.id}</td>
+              <td>{taxi.name}</td>
+              <td>{taxi.vehicle_no}</td>
+              <td>{taxi.driver_name}</td>
+            </tr>
+
+            )
+
+          })}
+        </tbody>
+      </Table>
     </>
   )
 }
