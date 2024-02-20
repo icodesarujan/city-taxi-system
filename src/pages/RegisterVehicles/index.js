@@ -40,7 +40,7 @@ const RegisterVehicles = () => {
   }
 
   return (
-    <Container className='mt-5'>
+    <div className='mt-5'>
       <Row className='mb-2'>
         <Col>
           <h1>Register a new vehicle</h1>
@@ -98,7 +98,7 @@ const RegisterVehicles = () => {
           </Form>
         </Modal.Body>
       </Modal>
-    </Container>
+    </div>
   )
 }
 
