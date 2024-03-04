@@ -7,6 +7,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import RegisterVehicles from './pages/RegisterVehicles';
 import { Route, Routes } from 'react-router-dom';
 import Taxies from './pages/Taxies';
+import Reservations from './pages/Reservations';
 
 function App() {
   
@@ -21,6 +22,7 @@ function App() {
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/register-vehicles">Register Vehicle</Nav.Link>
             <Nav.Link href="/taxies">Taxies</Nav.Link>
+            <Nav.Link href="/reservations">Reservations</Nav.Link>
             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">
@@ -41,6 +43,7 @@ function App() {
         {/* <Route path="/" element={<Home />} /> */}
         <Route path="/register-vehicles" element={<RegisterVehicles />} />
         <Route path="/taxies" element={<Taxies />} />
+        <Route path="/reservations" element={<Reservations />} />
       </Routes>
     </Container>
     

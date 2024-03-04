@@ -2,15 +2,15 @@ import React from 'react'
 import { supabase } from '../../utils/supabase'
 import { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
+import Taxi from '../../models/Taxi';
 
 const Taxies = () => {
   const [taxies, setTaxies] = useState([])
   useEffect(() => {
     async function getTaxies() {
       const { data: taxies } = await supabase.from('taxies').select()
-      console.log(taxies);
       if (taxies.length > 0) {
-        setTaxies(taxies)
+        setTaxies(Taxi.fromTaxies(taxies))
       }
     }
 
@@ -33,8 +33,8 @@ const Taxies = () => {
             <tr key={taxi.id}>
               <td>{taxi.id}</td>
               <td>{taxi.name}</td>
-              <td>{taxi.vehicle_no}</td>
-              <td>{taxi.driver_name}</td>
+              <td>{taxi.vehicleNo}</td>
+              <td>{taxi.driverName}</td>
             </tr>
 
             )
