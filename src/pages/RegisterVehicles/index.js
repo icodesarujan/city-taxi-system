@@ -19,7 +19,7 @@ const RegisterVehicles = () => {
     policyNumber: '',
     policyExpiry: '',
     serviceType: '',
-    availabilityStatus: ''
+    availabilityStatus: true
   });
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -63,11 +63,25 @@ const RegisterVehicles = () => {
   //   setVehicleNumber('')
   // }
 
-  // const clearForm = () => {
-  //   setdriverName('')
-  //   setVehicleName('')
-  //   setVehicleNumber('')
-  // }
+  const clearForm = () => {
+    setFormData({
+      taxiRegNumber: '',
+      vehicleMake: '',
+      vehicleModel: '',
+      vehicleYear: '',
+      color: '',
+      seats: '',
+      licenseNumber: '',
+      driverName: '',
+      driverContact: '',
+      driverAddress: '',
+      insuranceProvider: '',
+      policyNumber: '',
+      policyExpiry: '',
+      serviceType: '',
+      availabilityStatus: true
+    })
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -95,6 +109,7 @@ const RegisterVehicles = () => {
     .select()
     if (!error) {
       setSuccess(true)
+      clearForm()
     } else {
       setError(true)
     }
