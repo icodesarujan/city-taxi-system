@@ -4,7 +4,6 @@ import { supabase } from '../../utils/supabase'
 import { v4 as uuidv4 } from 'uuid'
 
 const RegisterVehicles = () => {
-  const [modalShow, setModalShow] = useState(false)
   const [formData, setFormData] = useState({
     taxiRegNumber: '',
     vehicleMake: '',
@@ -70,9 +69,35 @@ const RegisterVehicles = () => {
   //   setVehicleNumber('')
   // }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Submit the form data to your API here
+
+    const { error } = await supabase
+    .from('taxies')
+    .insert([
+      { 
+        reg_no: formData.taxiRegNumber,
+        make: formData.vehicleMake,
+        model: formData.vehicleModel,
+        year: formData.vehicleYear,
+        color: formData.color,
+        no_of_seats: formData.seats,
+        driver_license_no: formData.licenseNumber,
+        driver_contact: formData.driverContact,
+        driver_address: formData.driverAddress,
+        insurance_provider: formData.insuranceProvider,
+        policy_no: formData.policy_no,
+        policy_exp_date: formData.policyExpiry,
+        service_type: formData.serviceType,
+        availability: formData.availabilityStatus
+      },
+    ])
+    .select()
+    if (!error) {
+      setSuccess(true)
+    } else {
+      setError(true)
+    }
   };
 
   return (
@@ -173,9 +198,9 @@ const RegisterVehicles = () => {
             <Form.Label>Taxi Service Type</Form.Label>
             <Form.Control as="select" name="serviceType" value={formData.serviceType} onChange={handleChange}>
               <option value="">Select...</option>
-              <option value="standard">Standard</option>
-              <option value="premium">Premium</option>
-              <option value="luxury">Luxury</option>
+              <option value="1">Standard</option>
+              <option value="2">Premium</option>
+              <option value="3">Luxury</option>
             </Form.Control>
           </Form.Group>
 
@@ -183,8 +208,8 @@ const RegisterVehicles = () => {
             <Form.Label>Availability Status</Form.Label>
             <Form.Control as="select" name="availabilityStatus" value={formData.availabilityStatus} onChange={handleChange}>
               <option value="">Select...</option>
-              <option value="available">Available</option>
-              <option value="unavailable">Unavailable</option>
+              <option value="true">Available</option>
+              <option value="false">Unavailable</option>
             </Form.Control>
           </Form.Group>
           </Row>
