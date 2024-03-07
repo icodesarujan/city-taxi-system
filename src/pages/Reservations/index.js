@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Container, Table } from "react-bootstrap";
 import { tableData, tableHeading } from "../../Data/ReservationData";
+import { useNavigate } from "react-router-dom";
 
 const getClassNames = (key, value) => {
   if (key === "PaymentProcess") {
@@ -14,14 +15,16 @@ const getClassNames = (key, value) => {
 };
 
 const Reservations = () => {
+  const navigate = useNavigate();
+
   const onActionClick = (rowData) => {
-    console.log("Row data:", rowData);
+    navigate("/reservation-detail", { state: { rowData } });
   };
 
   return (
     <div>
       <Container fluid>
-        <h1 className="pb-4">Reservations Details</h1>
+        <h1 className="pb-4">Reservations</h1>
         <Table responsive className="text-center">
           <thead>
             <tr>

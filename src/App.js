@@ -9,8 +9,9 @@ import { Route, Routes } from "react-router-dom";
 import Taxies from "./pages/Taxies";
 import Reservations from "./pages/Reservations";
 import ReservationPage from "./pages/Operator";
-import Login from './pages/Login';
-import './App.css'
+import Login from "./pages/Login";
+import "./App.css";
+import ReservationDetail from "./pages/ReservationDetail";
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
               <Nav.Link href="/reservations">Reservations</Nav.Link>
               <Nav.Link href="/operator">Operator</Nav.Link>
               <Nav.Link href="/login">Login</Nav.Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">
                   Another action
@@ -50,9 +51,10 @@ function App() {
           <Route path="/register-vehicles" element={<RegisterVehicles />} />
           <Route path="/taxies" element={<Taxies />} />
           <Route path="/reservations" element={<Reservations />} />
+          <Route path="/reservation-detail" element={<ReservationDetail />} />
           <Route path="/operator" element={<ReservationPage />} />
           <Route path="/login" element={<Login />} />
-      </Routes>
+        </Routes>
       </Container>
     </div>
   );
