@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import './LoginPage.css';
 import { FaUser, FaLock } from "react-icons/fa";
+import { supabase } from '../../utils/supabase'
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
@@ -9,26 +10,18 @@ const LoginPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch('https://your-backend-api.com/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
+            const { user, error } = await supabase.auth.signIn({
+                email: username,
+                password: password,
             });
-
-            if (response.ok) {
-                const data = await response.json();
-                // Assuming 'data' contains some token or user info upon successful login
-                console.log('Login Successful:', data);
+            if (user) {
+                console.log('Login Successful:', user);
                 // Handle post-login logic here, like redirecting the user or storing the login token
             } else {
-                // Handle HTTP errors here
-                console.error('Login failed:', response.status, response.statusText);
+                console.error('Login failed:', error.message);
             }
         } catch (error) {
-            // Handle network errors or other unexpected errors
-            console.error('Error during login:', error);
+            console.error('Error during login:', error.message);
         }
     };
 
