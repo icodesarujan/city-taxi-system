@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container, Table } from "react-bootstrap";
-import { tableData, tableHeading } from "../../Data/ReservationData";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../utils/supabase";
+import Reservation from "../../models/Reservation";
 
 const getClassNames = (key, value) => {
   if (key === "PaymentProcess") {
@@ -17,6 +18,21 @@ const getClassNames = (key, value) => {
 const Reservations = () => {
   const navigate = useNavigate();
 
+  const [reservations, setReservations] = useState();
+
+  useEffect(() => {
+    async function getReservations() {
+      const { data: reservations } = await supabase
+        .from("reservations")
+        .select();
+      if (reservations.length > 0) {
+        setReservations(Reservation.fromReservations(reservations));
+      }
+    }
+
+    getReservations();
+  }, []);
+
   const onActionClick = (rowData) => {
     navigate("/reservation-detail", { state: { rowData } });
   };
@@ -28,25 +44,26 @@ const Reservations = () => {
         <Table responsive className="text-center">
           <thead>
             <tr>
-              {tableHeading?.map((heading, index) => (
-                <th key={index}>{heading}</th>
-              ))}
+              <td>Reservation ID</td>
+              <td>From </td>
+              <td>To </td>
+              <td>Date </td>
+              <td>Actions </td>
             </tr>
           </thead>
           <tbody>
-            {tableData?.map((item, rowIndex) => (
-              <tr key={rowIndex}>
-                {Object.entries(item).map(([key, value], cellIndex) => (
-                  <td key={cellIndex} className={getClassNames(key, value)}>
-                    {value}
-                  </td>
-                ))}
+            {reservations?.map((reservation) => (
+              <tr key={reservation.id}>
+                <td>{reservation.id}</td>
+                <td>{reservation.fromLocation}</td>
+                <td>{reservation.toLocation}</td>
+                <td>{reservation.date}</td>
                 <td>
                   <Button
                     variant="outline-primary"
-                    onClick={() => onActionClick(item)}
+                    onClick={() => onActionClick(reservation)}
                   >
-                    View {item.ReservationID}
+                    View {reservation.id}
                   </Button>
                 </td>
               </tr>
