@@ -5,7 +5,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
 import RegisterVehicles from "./pages/RegisterVehicles";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Taxies from "./pages/Taxies";
 import Reservations from "./pages/Reservations";
 import ReservationPage from "./pages/Operator";
@@ -15,6 +15,8 @@ import ReservationDetail from "./pages/ReservationDetail";
 import SignUp from "./pages/SignUp";
 
 function App() {
+  const location = useLocation();
+
   return (
     <div>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -23,12 +25,33 @@ function App() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto" variant="underline">
-              <Nav.Link href="/">Home</Nav.Link>
-              <Nav.Link href="/register-vehicles">Register Vehicle</Nav.Link>
-              <Nav.Link href="/taxies">Taxies</Nav.Link>
-              <Nav.Link href="/reservations">Reservations</Nav.Link>
-              <Nav.Link href="/operator">Operator</Nav.Link>
-              <Nav.Link href="/login">Login</Nav.Link>
+              <Nav.Link href="/" active={location.pathname === "/"}>
+                Home
+              </Nav.Link>
+              <Nav.Link
+                href="/register-vehicles"
+                active={location.pathname === "/register-vehicles"}
+              >
+                Register Vehicle
+              </Nav.Link>
+              <Nav.Link href="/taxies" active={location.pathname === "/taxies"}>
+                Taxies
+              </Nav.Link>
+              <Nav.Link
+                href="/reservations"
+                active={location.pathname === "/reservations"}
+              >
+                Reservations
+              </Nav.Link>
+              <Nav.Link
+                href="/operator"
+                active={location.pathname === "/operator"}
+              >
+                Operator
+              </Nav.Link>
+              <Nav.Link href="/login" active={location.pathname === "/login"}>
+                Login
+              </Nav.Link>
               <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">
