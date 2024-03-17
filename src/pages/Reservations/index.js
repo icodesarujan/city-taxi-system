@@ -24,7 +24,8 @@ const Reservations = () => {
     async function getReservations() {
       const { data: reservations } = await supabase
         .from("reservations")
-        .select();
+        .select("*, passengers(*), taxies(*)")
+      console.log(reservations);
       if (reservations.length > 0) {
         setReservations(Reservation.fromReservations(reservations));
       }

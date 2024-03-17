@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Button, Col, Container, Form, Row, Alert } from "react-bootstrap";
 import Select from "react-select";
+import Taxi from "../../models/Taxi";
+import { supabase } from "../../utils/supabase";
+import Passenger from "../../models/Passenger";
 
 const ReservationPage = () => {
   const [locations, setLocations] = useState([]);
-  const [vehicles, setVehicles] = useState([]);
+  const [taxies, setTaxies] = useState([]);
+  const [passengers, setPassengers] = useState([]);
   const [formData, setFormData] = useState({
     fromLocation: null,
     toLocation: null,
     selectedVehicle: null,
-    name: "",
-    mobile: "",
-    email: "",
+    selectedPassenger: null,
+    date: new Date().toISOString()
   });
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -19,25 +22,30 @@ const ReservationPage = () => {
   useEffect(() => {
     // Dummy locations
     const dummyLocations = [
-      { value: "location1", label: "Galle" },
-      { value: "location2", label: "Jaffna" },
-      { value: "location2", label: "Ampara" },
-      { value: "location2", label: "Sigiriya" },
-      { value: "location2", label: "Colombo" },
+      { value: "1", label: "Galle" },
+      { value: "2", label: "Jaffna" },
+      { value: "3", label: "Ampara" },
+      { value: "4", label: "Sigiriya" },
+      { value: "5", label: "Colombo" },
       // Add more locations as needed
     ];
     setLocations(dummyLocations);
 
-    // Dummy vehicles
-    const dummyVehicles = [
-      { value: "vehicle1", label: "Toyota Corolla , Driver : John " },
-      { value: "vehicle2", label: "BMW M5 ,  Driver : Smith " },
-      { value: "vehicle2", label: "Axio,  Driver : Jane " },
-      { value: "vehicle2", label: "Land Rover ,  Driver : Mark " },
-      { value: "vehicle2", label: "Toyota TownAce,  Driver : Miller " },
-      // Add more vehicles as needed
-    ];
-    setVehicles(dummyVehicles);
+    async function getTaxies() {
+      const { data: taxies } = await supabase.from('taxies').select()
+      if (taxies.length > 0) {
+        setTaxies(Taxi.fromTaxies(taxies))
+      }
+    }
+    async function getPassengers() {
+      const { data: passengers } = await supabase.from('passengers').select()
+      console.log(passengers);
+      if (passengers.length > 0) {
+        setPassengers(Passenger.fromPassengers(passengers))
+      }
+    }
+    getPassengers()
+    getTaxies()
   }, []);
 
   const handleChange = (name, value) => {
@@ -47,14 +55,44 @@ const ReservationPage = () => {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handlePassengerChange = (event) => {
+    setFormData({
+      ...formData,
+      selectedPassenger: event.target.value
+    })
+  }
+
+  const handleVehicleChange = (event) => {
+    setFormData({
+      ...formData,
+      selectedVehicle: event.target.value
+    })
+  }
+
+  const handleDateChange = (event) => {
+    setFormData({
+      ...formData,
+      date: event.target.value
+    })
+  }
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Perform reservation submission logic here (using dummy data)
     try {
-      // Simulate an API call or database operation
-      // For demonstration purposes, just log the form data
-      console.log("Form data submitted:", formData);
+      const { error } = await supabase
+      .from('reservations')
+      .insert([
+        { 
+          from: formData.fromLocation.label,
+          to: formData.toLocation.label,
+          date: new Date(formData.date).toISOString(),
+          passenger_id: formData.selectedPassenger,
+          taxi_id: formData.selectedVehicle,
+        },
+      ])
+      .select()
 
       setSuccess(true);
       // Clear the form after successful submission
@@ -70,7 +108,6 @@ const ReservationPage = () => {
       console.error("Error submitting reservation:", error);
       setError(true);
     }
-    alert("REserved Successfully ");
   };
 
   return (
@@ -80,7 +117,7 @@ const ReservationPage = () => {
           <h1>Reservation Page</h1>
         </Col>
       </Row>
-      {/* <Row className="mb-4">
+      <Row className="mb-4">
         {success && (
           <Alert
             variant="success"
@@ -95,7 +132,7 @@ const ReservationPage = () => {
             Error submitting reservation. Please try again.
           </Alert>
         )}
-      </Row> */}
+      </Row>
       <Row className="mb-4">
         <Form onSubmit={handleSubmit}>
           <Row className="mb-4">
@@ -129,61 +166,36 @@ const ReservationPage = () => {
             </Col>
           </Row>
           <Row className="mb-4">
-            <Col md={12}>
+            <Col md={6}>
               <Form.Group controlId="selectedVehicle">
                 <Form.Label>Select Vehicle</Form.Label>
-                <Select
-                  options={vehicles}
-                  value={formData.selectedVehicle}
-                  onChange={(selectedOption) =>
-                    handleChange("selectedVehicle", selectedOption)
-                  }
-                  isSearchable
-                  placeholder="Select Vehicle"
-                />
+                <Form.Control as="select" name="selectedVehicle" value={formData.selectedVehicle} onChange={handleVehicleChange}>
+                  <option >Select Vehicle...</option>
+                  {taxies.map(taxi => {
+                    return <option key={taxi.id} value={taxi.id}>{taxi.name}</option>
+                  })}
+                  
+                </Form.Control>
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group controlId="selectedPassenger">
+                <Form.Label>Select Passenger</Form.Label>
+                <Form.Control as="select" name="selectedPassenger" value={formData.selectedPassenger} onChange={handlePassengerChange}>
+                  <option >Select Passenger...</option>
+                  {passengers.map(passenger => {
+                    return <option key={passenger.id} value={passenger.id}>{passenger.fullName}</option>
+                  })}
+                  
+                </Form.Control>
               </Form.Group>
             </Col>
           </Row>
           <Row className="mb-4">
-            {" "}
-            <Col md={6}>
-              <Form.Group controlId="name">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={(e) => handleChange("name", e.target.value)}
-                />
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              {" "}
-              <Form.Group controlId="mobile">
-                <Form.Label>Mobile</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="mobile"
-                  value={formData.mobile}
-                  onChange={(e) => handleChange("mobile", e.target.value)}
-                />
-              </Form.Group>
-            </Col>{" "}
-          </Row>
-          <Row className="mb-4">
-            {" "}
-            <Col md={6}>
-              {" "}
-              <Form.Group controlId="email">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={(e) => handleChange("email", e.target.value)}
-                />
-              </Form.Group>
-            </Col>
+            <Form.Group as={Col} md={6} controlId="date">
+              <Form.Label>Driver's Full Name</Form.Label>
+              <Form.Control type="date" name="date" value={formData.date} onChange={handleDateChange} />
+            </Form.Group>
           </Row>
 
           <Button variant="primary" type="submit" block>

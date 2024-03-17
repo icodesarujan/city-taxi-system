@@ -21,4 +21,13 @@ export default class Taxi {
     })
     return taxiesArray
   }
+
+  static fromTaxi(taxi) {
+    return new Taxi({
+      id : taxi.id,
+      vehicleNo : taxi.vehicle_no,
+      name: taxi.name,
+      driverName: taxi.driver_name
+    })
+  }
 }
