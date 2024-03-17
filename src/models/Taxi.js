@@ -12,7 +12,7 @@ export default class Taxi {
       taxiesArray.push(
         new Taxi({
           id : taxi.id,
-          vehicleNo : taxi.vehicle_no,
+          vehicleNo : taxi.reg_no,
           name: taxi.name,
           driverName: taxi.driver_name
         })

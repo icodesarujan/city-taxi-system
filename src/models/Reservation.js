@@ -10,6 +10,7 @@ export default class Reservation {
   }
 
   static fromReservations(reservations) {
+    console.log('reservations', reservations);
     const reservationArray = [];
     reservations?.map((reservation) => {
       reservationArray.push(
@@ -18,13 +19,12 @@ export default class Reservation {
           fromLocation: reservation.from,
           toLocation: reservation.to,
           date: reservation.date,
-          taxi: new Taxi({
-            name: reservation.taxies.name
-          })
+          // taxi: Taxi.fromTaxi(taxies)
         })
       );
       return null;
     });
+    console.log(reservationArray);
     return reservationArray;
   }
 }
