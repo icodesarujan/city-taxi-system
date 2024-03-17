@@ -12,6 +12,7 @@ import ReservationPage from "./pages/Operator";
 import Login from "./pages/Login";
 import "./App.css";
 import ReservationDetail from "./pages/ReservationDetail";
+import SignUp from "./pages/SignUp";
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
           <Route path="/reservation-detail" element={<ReservationDetail />} />
           <Route path="/operator" element={<ReservationPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signUp" element={<SignUp />} />
         </Routes>
       </Container>
     </div>

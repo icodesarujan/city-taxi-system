@@ -11,35 +11,38 @@ import {
 import { supabase } from "../../utils/supabase";
 import { useNavigate, useNavigation } from "react-router-dom";
 
-const Login = () => {
+const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+
   let navigate = useNavigate();
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const onActionClick = () => {
-    navigate("/signUp");
+  const handleChange = (event) => {
+    console.log(event.target.name, event.target.value);
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const { data: dataUser, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const { data: dataUser, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
       });
       console.log(dataUser);
       if (dataUser.user) {
-        navigate("/reservations");
+        navigate("/login");
       }
       if (error) {
         console.log(error);
@@ -48,6 +51,12 @@ const Login = () => {
     } catch (error) {
       // console.log(error)
     }
+  };
+  const clearForm = () => {
+    setFormData({
+      email: "",
+      password: "",
+    });
   };
 
   return (
@@ -62,9 +71,10 @@ const Login = () => {
           <Form.Label>Email address</Form.Label>
           <Form.Control
             type="email"
+            name="email"
             placeholder="Enter email"
-            value={email}
-            onChange={handleEmailChange}
+            value={formData.email}
+            onChange={handleChange}
             required
           />
         </Form.Group>
@@ -73,23 +83,16 @@ const Login = () => {
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
+            name="password"
             placeholder="Password"
-            value={password}
-            onChange={handlePasswordChange}
+            value={formData.password}
+            onChange={handleChange}
             required
           />
         </Form.Group>
         <div style={{ width: "100%" }}>
           <Button variant="primary" type="submit" style={{ margin: "5px" }}>
-            Sign In
-          </Button>
-          <Button
-            variant="primary"
-            type="submit"
-            style={{ margin: "5px" }}
-            onClick={() => onActionClick()}
-          >
-            Sign Up
+            Register
           </Button>
         </div>
       </Form>
@@ -97,4 +100,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
