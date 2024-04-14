@@ -25,7 +25,6 @@ const Reservations = () => {
       const { data: reservations } = await supabase
         .from("reservations")
         .select("*, passengers(*), taxies(*)")
-      console.log(reservations);
       if (reservations.length > 0) {
         setReservations(Reservation.fromReservations(reservations));
       }
@@ -34,8 +33,8 @@ const Reservations = () => {
     getReservations();
   }, []);
 
-  const onActionClick = (rowData) => {
-    navigate("/reservation-detail", { state: { rowData } });
+  const onActionClick = (id) => {
+    navigate("/reservation-detail/" + id);
   };
 
   return (
@@ -49,6 +48,7 @@ const Reservations = () => {
               <td>From </td>
               <td>To </td>
               <td>Date </td>
+              <td>Vehicle Reg No </td>
               <td>Actions </td>
             </tr>
           </thead>
@@ -59,12 +59,13 @@ const Reservations = () => {
                 <td>{reservation.fromLocation}</td>
                 <td>{reservation.toLocation}</td>
                 <td>{reservation.date}</td>
+                <td>{reservation.taxi.vehicleNo}</td>
                 <td>
                   <Button
                     variant="outline-primary"
-                    onClick={() => onActionClick(reservation)}
+                    onClick={() => onActionClick(reservation.id)}
                   >
-                    View {reservation.id}
+                    View 
                   </Button>
                 </td>
               </tr>

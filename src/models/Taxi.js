@@ -53,8 +53,8 @@ export default class Taxi {
 
   static fromTaxi(taxi) {
     return new Taxi({
-      id: taxi.id,
-      vehicleNo: taxi.vehicle_no,
+      id : taxi.id,
+      vehicleNo : taxi.reg_no,
       name: taxi.name,
       driverName: taxi.driver_name,
       make: taxi.make,

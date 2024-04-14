@@ -24,4 +24,14 @@ export default class Passenger {
       })
       return passengersArray
     }
+
+    static fromPassenger(passenger) {
+      return new Passenger({
+        id : passenger.id,
+        firstName : passenger.first_name,
+        lastName: passenger.last_name,
+        mobile: passenger.mobile,
+        email: passenger.email
+      })
+    }
   }

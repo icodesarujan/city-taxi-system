@@ -75,7 +75,7 @@ function App() {
           <Route path="/register-vehicles" element={<RegisterVehicles />} />
           <Route path="/taxies" element={<Taxies />} />
           <Route path="/reservations" element={<Reservations />} />
-          <Route path="/reservation-detail" element={<ReservationDetail />} />
+          <Route path="/reservation-detail/:id" element={<ReservationDetail />} />
           <Route path="/operator" element={<ReservationPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signUp" element={<SignUp />} />

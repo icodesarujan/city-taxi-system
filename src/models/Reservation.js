@@ -1,16 +1,17 @@
+import Passenger from "./Passenger";
 import Taxi from "./Taxi";
 
 export default class Reservation {
-  constructor({ id, toLocation, fromLocation, date, taxi }) {
+  constructor({ id, toLocation, fromLocation, date, taxi, passenger }) {
     this.id = id;
     this.fromLocation = fromLocation;
     this.toLocation = toLocation;
     this.date = new Date(date).toLocaleDateString();
     this.taxi = taxi
+    this.passenger = passenger
   }
 
   static fromReservations(reservations) {
-    console.log('reservations', reservations);
     const reservationArray = [];
     reservations?.map((reservation) => {
       reservationArray.push(
@@ -19,12 +20,12 @@ export default class Reservation {
           fromLocation: reservation.from,
           toLocation: reservation.to,
           date: reservation.date,
-          // taxi: Taxi.fromTaxi(taxies)
+          taxi: Taxi.fromTaxi(reservation.taxies),
+          // passenger: Passenger.fromPassenger(reservation.passengers)
         })
       );
       return null;
     });
-    console.log(reservationArray);
     return reservationArray;
   }
 }

@@ -1,17 +1,35 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card, Col, Container, Image, Row, Stack } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
+import { supabase } from "../../utils/supabase";
+import Reservation from "../../models/Reservation";
 
 const ReservationDetail = () => {
   const location = useLocation();
+  const {id} = useParams();
+  const [reservation, setReservation] = useState(null);
+
+  console.log(id);
 
   useEffect(() => {
-    if (location.state && location.state.rowData) {
-      console.log("Row data in reservation-detail:", location.state.rowData);
+    async function getReservations() {
+      try {
+        const { data: reservation } = await supabase
+          .from("reservations")
+          .select("*, passengers(*), taxies(*)")
+          .eq('id', +id)
+          if (reservation) {
+            console.log(reservation);
+            setReservation(Reservation.fromReservations(reservation));
+          }
+      } catch (e) {
+        console.log(e);
+      }
     }
-  }, [location.state]);
 
-  //   const Details = location?.state?.rowData;
+    getReservations();
+  }, []);
+
 
   return (
     <>
@@ -28,7 +46,7 @@ const ReservationDetail = () => {
               <Card.Body>
                 <Card.Title>Passenger Detail</Card.Title>
                 <Card.Text className="fw-medium text-muted">
-                  Passenger Name: <span className="fw-normal">Sahithyan</span>
+                  Passenger Name: <span className="fw-normal">{}</span>
                 </Card.Text>
                 <Card.Text className="fw-medium text-muted">
                   Passenger Mobile:{" "}
@@ -46,15 +64,15 @@ const ReservationDetail = () => {
               <Card.Body>
                 <Card.Title>Trip Detail</Card.Title>
                 <Card.Text className="fw-medium text-muted">
-                  To: <span className="fw-normal">Colombo</span>
+                  To: <span className="fw-normal">{reservation[0]?.toLocation}</span>
                 </Card.Text>
                 <Card.Text className="fw-medium text-muted">
-                  From: <span className="fw-normal">Mardana</span>
+                  From: <span className="fw-normal">{reservation[0]?.fromLocation}</span>
                 </Card.Text>
                 <Stack direction="horizontal">
                   <Col>
                     <Card.Text className="fw-medium text-muted">
-                      Date: <span className="fw-normal">2024.03.07</span>
+                      Date: <span className="fw-normal">{reservation[0]?.date}</span>
                     </Card.Text>
                   </Col>
                   <Col>
