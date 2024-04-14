@@ -21,7 +21,7 @@ export default class Reservation {
           toLocation: reservation.to,
           date: reservation.date,
           taxi: Taxi.fromTaxi(reservation.taxies),
-          // passenger: Passenger.fromPassenger(reservation.passengers)
+          passenger: Passenger.fromPassenger(reservation.passengers)
         })
       );
       return null;
