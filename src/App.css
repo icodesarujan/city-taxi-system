@@ -1,0 +1,9 @@
+.login {
+  max-width: 300px;
+  margin: auto;
+}
+
+.nav-link.active {
+  color: red; 
+  font-weight: bold; 
+}
